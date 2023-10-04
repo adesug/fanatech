@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\superAdmin\adminInventoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +22,24 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::group(['middleware' => ['auth','role:SuperAdmin']], function() {
+    Route::get('admin/home',[HomeController::class,'superAdminHome'])->name('superAdmin.home');
+    Route::get('admin/inventory',[adminInventoryController::class,'index'])->name('admin.inventory');
+});
+
+Route::group(['middleware' => ['auth','role:Sales']], function() {
+    Route::get('sales/home',[HomeController::class,'salesHome'])->name('sales.home');
+});
+
+Route::group(['middleware' =>['auth','role:Purchase']], function() {
+    Route::get('purchase/home',[HomeController::class,'purchaseHome'])->name('purchase.home');
+});
+
+Route::group(['middleware' => ['auth','role:Manager']], function() {
+    Route::get('manager/home',[HomeController::class,'managerHome'])->name('manager.home');
+});
+
+
+
+
