@@ -28,7 +28,7 @@ class HomeController extends Controller
     {
         // return view('home');
         if(request()->user()->role == 'SuperAdmin'){
-            return view('SuperAdminHome');
+            return view('superAdminHome');
         }else if(request()->user()->role == 'Sales'){
             return view('salesHome');
         }else if(request()->user()->role == 'Purchase') {

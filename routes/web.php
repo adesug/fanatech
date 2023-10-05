@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\superAdmin\adminInventoryController;
+use App\Http\Controllers\superAdmin\adminSalesController;
+use App\Http\Controllers\superAdmin\adminPurchasesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,8 +26,12 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => ['auth','role:SuperAdmin']], function() {
-    Route::get('admin/home',[HomeController::class,'superAdminHome'])->name('superAdmin.home');
+    Route::get('admin/home',[HomeController::class,'index'])->name('superAdmin.home');
     Route::get('admin/inventory',[adminInventoryController::class,'index'])->name('admin.inventory');
+
+    Route::get('admin/sales',[adminSalesController::class,'index'])->name('admin.sales');
+
+    Route::get('admin/purchases',[adminPurchasesController::class,'index'])->name('admin.purchases');
 });
 
 Route::group(['middleware' => ['auth','role:Sales']], function() {
