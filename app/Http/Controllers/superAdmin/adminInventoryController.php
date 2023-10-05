@@ -4,6 +4,7 @@ namespace App\Http\Controllers\superAdmin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class adminInventoryController extends Controller
 {
@@ -14,19 +15,9 @@ class adminInventoryController extends Controller
      */
     public function index()
     {
-        return view('superAdmin.inventory.index');
+        $inventory = DB::table('inventories')->get();
+        return view('superAdmin.inventory.index',compact('inventory'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -35,7 +26,20 @@ class adminInventoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request);
+        $code = $request->code;
+        $name = $request->name;
+        $price = $request->price;
+        $stock = $request->stock;
+
+        $data = [
+            'code' => $code,
+            'name' => $name,
+            'price' => $price,
+            'stock' => $stock
+        ];
+        $simpan = DB::table('inventories')->insert($data);
+        return redirect()->back();
     }
 
     /**
