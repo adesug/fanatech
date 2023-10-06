@@ -147,7 +147,7 @@
 @push('myscript')
 <script>
     $(function () {
-   $('#example2').DataTable({
+   $('#table-1').DataTable({
      "paging": true,
      "lengthChange": false,
      "searching": true,
