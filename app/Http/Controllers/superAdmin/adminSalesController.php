@@ -18,10 +18,6 @@ class adminSalesController extends Controller
     public function index()
     {
         $sales =  Sales::with('user')->get();
-       
-        // dd($sales);
-        // orderBy('user_id')->join('users','users.id','sales.user_id')->
-        // dd($sales);
         $userSales = DB::table('users')->where('role','Sales')->get();
         return view ('superAdmin.sales.index',compact('sales','userSales'));
     }
