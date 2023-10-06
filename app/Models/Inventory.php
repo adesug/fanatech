@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Inventory extends Model
 {
     use HasFactory;
-}
+    protected $table = 'inventories';
+    protected $primaryKey = 'id';
+    protected $guarded = [];
+
+    public function purchases_details(){
+        return $this->hasOne(Purchases_detail::class);
+}   }

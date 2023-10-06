@@ -15,4 +15,7 @@ class Purchases extends Model
     public function user(){
         return $this->belongsTo(User::class,'user_id');
     }
+    public function purchases_details(){
+        return this->has(Purchases_detail::class,'purchases_id');
+    }
 }

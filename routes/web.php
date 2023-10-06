@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\superAdmin\adminInventoryController;
 use App\Http\Controllers\superAdmin\adminSalesController;
 use App\Http\Controllers\superAdmin\adminPurchasesController;
+use App\Http\Controllers\purchases\PurchasesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,12 @@ Route::group(['middleware' => ['auth','role:Sales']], function() {
 
 Route::group(['middleware' =>['auth','role:Purchase']], function() {
     Route::get('purchase/home',[HomeController::class,'purchaseHome'])->name('purchase.home');
+
+    Route::get('purchases/index',[PurchasesController::class,'index'])->name('purchases.index');
+    Route::post('purchases/index/store',[PurchasesController::class,'store'])->name('purchases.indexStore');
+    Route::post('purchases/index/delete/{id}',[PurchasesController::class,'destroy'])->name('purchases.indexDestroy');
+    Route::post('purchases/index/edit',[PurchasesController::class,'edit'])->name('purchases.indexEdit');
+    Route::post('purchases/index/update',[PurchasesController::class,'update'])->name('purchases.indexUpdate');
 });
 
 Route::group(['middleware' => ['auth','role:Manager']], function() {

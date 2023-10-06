@@ -12,6 +12,7 @@
       </div>
 
       <!-- Sidebar Menu -->
+      @if (Auth::user()->role == 'SuperAdmin')
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item">
@@ -53,6 +54,38 @@
           </li>
         </ul>
       </nav>
+      @elseif(Auth::user()->role == 'Purchase')
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <li class="nav-item">
+                <a href="{{route('superAdmin.home')}}" class="nav-link {{(request()->is('admin/home') || (request()->is('home'))) ? 'active' : ''}}">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                  <p>
+                    Home
+                  </p>
+                </a>
+              </li>
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link {{(request()->is('admin/inventory*') || request()->is('admin/sales*') ? 'active' : '' || request()->is('admin/purchases*')) ? 'active' : ''}}">
+                <i class="nav-icon fas fa-th"></i>
+              <p>
+                Menu
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{route('purchases.index')}}" class="nav-link {{(request()->is('purchases/index*')) ? 'active' : ''}}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Purchases</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      @endif
+   
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
