@@ -29,6 +29,10 @@ Route::group(['middleware' => ['auth','role:SuperAdmin']], function() {
     Route::get('admin/home',[HomeController::class,'index'])->name('superAdmin.home');
     Route::get('admin/inventory',[adminInventoryController::class,'index'])->name('admin.inventory');
     Route::post('admin/inventory/store',[adminInventoryController::class,'store'])->name('admin.inventoryStore');
+    Route::post('admin/inventory/delete/{id}',[adminInventoryController::class,'destroy'])->name('admin.inventoryDestroy');
+    Route::post('admin/inventory/edit',[adminInventoryController::class,'edit'])->name('admin.inventoryEdit');
+    Route::post('admin/inventory/update',[adminInventoryController::class,'update'])->name('admin.inventoryUpdate');
+
 
     Route::get('admin/sales',[adminSalesController::class,'index'])->name('admin.sales');
 

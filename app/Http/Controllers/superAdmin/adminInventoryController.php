@@ -5,6 +5,7 @@ namespace App\Http\Controllers\superAdmin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Redirect;
 
 class adminInventoryController extends Controller
 {
@@ -59,9 +60,11 @@ class adminInventoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $id = $request->id;
+        $data = DB::table('inventories')->where('id',$id)->first();
+        return view('superAdmin.inventory.edit',compact('data'));
     }
 
     /**
@@ -71,9 +74,22 @@ class adminInventoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $id = $request->id;
+        $code = $request->code;
+        $name = $request->name;
+        $price = $request->price;
+        $stock = $request->stock;
+
+        $data = [
+            'code' => $code,
+            'name' => $name,
+            'price' => $price,
+            'stock' => $stock,
+        ];
+        $simpan = DB::table('inventories')->where('id',$id)->update($data);
+        return redirect::back();
     }
 
     /**
@@ -84,6 +100,11 @@ class adminInventoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $delete = DB::table('inventories')->where('id',$id)->delete();
+        if($delete) {
+            return redirect::back();
+        }else {
+            dd($delete);
+        }
     }
 }
