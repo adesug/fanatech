@@ -11,5 +11,7 @@
 <script src="{{asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
 <script src="{{asset('assets/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
 <script src="{{asset('assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+<!-- Select2 -->
+<script src="{{asset('assets/plugins/select2/js/select2.full.min.js')}}"></script>
 
 @stack('myscript')

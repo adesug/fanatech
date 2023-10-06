@@ -4,6 +4,9 @@ namespace App\Http\Controllers\superAdmin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Redirect;
+use App\Models\Sales;
 
 class adminSalesController extends Controller
 {
@@ -14,7 +17,13 @@ class adminSalesController extends Controller
      */
     public function index()
     {
-        return view ('superAdmin.sales.index');
+        $sales =  Sales::with('user')->get();
+       
+        // dd($sales);
+        // orderBy('user_id')->join('users','users.id','sales.user_id')->
+        // dd($sales);
+        $userSales = DB::table('users')->where('role','Sales')->get();
+        return view ('superAdmin.sales.index',compact('sales','userSales'));
     }
 
     /**
@@ -35,7 +44,19 @@ class adminSalesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $number = $request->number;
+        $date= $request->date;
+        $user_id = $request->user_id;
+       
+
+        $data = [
+            'number' => $number,
+            'date' => $date,
+            'user_id' => $user_id,
+        ];
+        // dd($data);
+        $simpan = DB::table('sales')->insert($data);
+        return redirect()->back();
     }
 
     /**
@@ -55,9 +76,13 @@ class adminSalesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+     
+        $id = $request->id;
+        // dd($id);
+        $data= DB::table('sales')->where('id',$id)->first();
+        return view('superAdmin.sales.edit', compact('data'));
     }
 
     /**
@@ -80,6 +105,11 @@ class adminSalesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $delete = DB::table('sales')->where('id',$id)->delete();
+        if($delete) {
+            return redirect::back();
+        }else {
+            dd($delete);
+        }
     }
 }

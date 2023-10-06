@@ -27,14 +27,18 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => ['auth','role:SuperAdmin']], function() {
     Route::get('admin/home',[HomeController::class,'index'])->name('superAdmin.home');
+
     Route::get('admin/inventory',[adminInventoryController::class,'index'])->name('admin.inventory');
     Route::post('admin/inventory/store',[adminInventoryController::class,'store'])->name('admin.inventoryStore');
     Route::post('admin/inventory/delete/{id}',[adminInventoryController::class,'destroy'])->name('admin.inventoryDestroy');
     Route::post('admin/inventory/edit',[adminInventoryController::class,'edit'])->name('admin.inventoryEdit');
     Route::post('admin/inventory/update',[adminInventoryController::class,'update'])->name('admin.inventoryUpdate');
 
-
     Route::get('admin/sales',[adminSalesController::class,'index'])->name('admin.sales');
+    Route::post('admin/sales/Store',[adminSalesController::class,'store'])->name('admin.salesStore');
+    Route::post('admin/sales/delete/{id}',[adminSalesController::class,'destroy'])->name('admin.salesDestroy');
+    Route::post('admin/sales/edit',[adminSalesController::class,'edit'])->name('admin.salesEdit');
+    Route::post('admin/sales/update',[adminSalesController::class,'update'])->name('admin.salesUpdate');
 
     Route::get('admin/purchases',[adminPurchasesController::class,'index'])->name('admin.purchases');
 });

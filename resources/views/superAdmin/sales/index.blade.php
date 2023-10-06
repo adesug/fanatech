@@ -1,5 +1,6 @@
 @extends('layouts.body')
 @section('contentHeader')
+
 <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -22,42 +23,47 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-              <h3 class="card-title">DataTable with minimal features & hover style</h3>
+              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">
+                Create Data
+              </button>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="example2" class="table table-bordered table-hover">
+              <table id="table-1" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                  <th>Rendering engine</th>
-                  <th>Browser</th>
-                  <th>Platform(s)</th>
-                  <th>Engine version</th>
-                  <th>CSS grade</th>
+                  <th>No</th>
+                  <th>Number</th>
+                  <th>Date</th>
+                  <th>Sales Name</th>
+                  <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td>Misc</td>
-                  <td>IE Mobile</td>
-                  <td>Windows Mobile 6</td>
-                  <td>-</td>
-                  <td>C</td>
-                </tr>
-                <tr>
-                  <td>Misc</td>
-                  <td>PSP browser</td>
-                  <td>PSP</td>
-                  <td>-</td>
-                  <td>C</td>
-                </tr>
-                <tr>
-                  <td>Other browsers</td>
-                  <td>All others</td>
-                  <td>-</td>
-                  <td>-</td>
-                  <td>U</td>
-                </tr>
+                  @foreach ($sales as $item)
+                  <tr>
+                    <td>{{$loop->iteration}}</td>
+                    {{-- <td>{{$item->id}}</td> --}}
+                    <td>{{$item->number}}</td>
+                    <td>{{$item->date}}</td>
+                    <td>{{$item->user->name}}</td>
+                    <td>
+                      <form action="{{route('admin.salesDestroy',$item->id)}}" method="POST">
+                        <div class="margin">
+                          <span data-toggle="modal" data-target="#modalEditSales">
+                            <a  class="btn btn-warning edit" id="{{$item->id}}">Edit</a>
+                        </span>
+                        {{-- <button class="btn btn-info">Detail</button> --}}
+                        <span>
+                            @csrf
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </span>
+                        </div>
+
+                      </form>
+                    </td>
+                  </tr>
+                  @endforeach
                 </tbody>
               </table>
             </div>
@@ -67,6 +73,76 @@
     </div>
   </div>
   </div>
+
+  {{-- modal edit --}}
+  <div class="modal fade" id="modalEditSales">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Data</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="loadeditform">
+               
+            </div>
+
+            <!-- /.modal-content -->
+        </div>
+    </div>
+</div>
+  {{-- modal create --}}
+  <div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Create Data</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Sales</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form action="{{route('admin.salesStore')}}" method="POST" enctype="multipart/form-data" id="frmSales">
+                        @csrf
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Number</label>
+                                <input type="text" class="form-control" id="number" name="number" placeholder="number">
+                            </div>
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" class="form-control" id="date" name="date" placeholder="Date">
+                            </div>
+                            <div class="form-group">
+                                <label>Sales Name</label>
+                                <select class="form-control select2" id="myselect" name="user_id">
+                                  <option></option>
+                                  @foreach ($userSales as $item)
+                                      <option value="{{$item->id}}">{{$item->name}}</option>
+                                  @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save Data</button>
+            </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 @endsection
 @push('myscript')
 <script>
@@ -80,6 +156,27 @@
      "autoWidth": false,
      "responsive": true,
    });
+   $('.select2').select2({
+    placeholder: "Select...",
+    allowClear: true,
+   });
+   $('#table-1').on('click', '.edit', function () {
+                var id = $(this).attr('id');
+                console.log(id);
+                $.ajax({
+                    type: 'POST',
+                    url: '/admin/sales/edit',
+                    cache: false,
+                    data: {
+                        _token: "{{ csrf_token(); }}",
+                        id: id
+                    },
+                    success: function (respond) {
+                        $('#loadeditform').html(respond);
+                    }
+                });
+                $('#modalEditSales').modal('show');
+            });
  });
 </script>
 @endpush
