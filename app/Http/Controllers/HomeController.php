@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -26,9 +27,12 @@ class HomeController extends Controller
 
     public function index()
     {
+        $inventoryCount= DB::table('inventories')->count();
+        $purchasesCount= DB::table('purchases')->count();
+        $salesCount= DB::table('sales')->count();
         // return view('home');
         if(request()->user()->role == 'SuperAdmin'){
-            return view('superAdminHome');
+            return view('superAdminHome',compact('inventoryCount','purchasesCount','salesCount'));
         }else if(request()->user()->role == 'Sales'){
             return view('salesHome');
         }else if(request()->user()->role == 'Purchase') {
