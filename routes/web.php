@@ -41,6 +41,10 @@ Route::group(['middleware' => ['auth','role:SuperAdmin']], function() {
     Route::post('admin/sales/update',[adminSalesController::class,'update'])->name('admin.salesUpdate');
 
     Route::get('admin/purchases',[adminPurchasesController::class,'index'])->name('admin.purchases');
+    Route::post('admin/purchases/store',[adminPurchasesController::class,'store'])->name('admin.purchasesStore');
+    Route::post('admin/purchases/delete/{id}',[adminPurchasesController::class,'destroy'])->name('admin.purchasesDestroy');
+    Route::post('admin/purchases/edit',[adminPurchasesController::class,'edit'])->name('admin.purchasesEdit');
+    Route::post('admin/purchases/update',[adminPurchasesController::class,'update'])->name('admin.purchasesUpdate');
 });
 
 Route::group(['middleware' => ['auth','role:Sales']], function() {

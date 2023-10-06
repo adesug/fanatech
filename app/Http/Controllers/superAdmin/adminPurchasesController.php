@@ -4,6 +4,9 @@ namespace App\Http\Controllers\superAdmin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Redirect;
+use App\Models\Purchases;
 
 class adminPurchasesController extends Controller
 {
@@ -14,7 +17,11 @@ class adminPurchasesController extends Controller
      */
     public function index()
     {
-        return view('superAdmin.purchases.index');
+        $purchases = Purchases::with('user')->get();
+        // echo json_encode($purchases);
+        $userPurchases = DB::table('users')->where('role','Purchase')->get();
+
+        return view('superAdmin.purchases.index',compact('purchases','userPurchases'));
     }
 
     /**
@@ -24,7 +31,7 @@ class adminPurchasesController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -35,7 +42,17 @@ class adminPurchasesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $number = $request->number;
+        $date= $request->date;
+        $user_id = $request->user_id;
+
+        $data = [
+            'number' => $number,
+            'date' => $date,
+            'user_id' => $user_id,
+        ];
+        $simpan = DB::table('purchases')->insert($data);
+        return redirect()->back();
     }
 
     /**
@@ -55,9 +72,14 @@ class adminPurchasesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $id = $request->id;
+        $data = Purchases::with('user')->where('id',$id)->first();
+        $userPurchases = DB::table('users')->where('role','Purchase')->get();
+
+        // $userPurchases = DB::table('users')->where('role','Purchase')->get();
+        return view('superAdmin.purchases.edit', compact('data','userPurchases'));
     }
 
     /**
@@ -67,9 +89,20 @@ class adminPurchasesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $id = $request->id;
+        $number = $request->number;
+        $date = $request->date;
+        $user_id = $request->user_id;
+
+        $data = [
+            'number' => $number,
+            'date' => $date,
+            'user_id' => $user_id,
+        ];
+        $simpan = DB::table('purchases')->where('id',$id)->update($data);
+        return redirect::back();
     }
 
     /**
@@ -80,6 +113,11 @@ class adminPurchasesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $delete = DB::table('purchases')->where('id',$id)->delete();
+        if($delete) {
+            return redirect::back();
+        }else {
+            dd($delete);
+        }
     }
 }

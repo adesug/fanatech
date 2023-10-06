@@ -76,9 +76,9 @@ class adminSalesController extends Controller
     {
      
         $id = $request->id;
-        // dd($id);
-        $data= DB::table('sales')->where('id',$id)->first();
-        return view('superAdmin.sales.edit', compact('data'));
+        $data =  Sales::with('user')->where('id',$id)->first();
+        $userSales = DB::table('users')->where('role','Sales')->get();
+        return view('superAdmin.sales.edit', compact('data','userSales'));
     }
 
     /**
@@ -88,9 +88,20 @@ class adminSalesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $id = $request->id;
+        $number = $request->number;
+        $date = $request->date;
+        $user_id = $request->user_id;
+
+        $data = [
+            'number' => $number,
+            'date' => $date,
+            'user_id' => $user_id,
+        ];
+        $simpan = DB::table('sales')->where('id',$id)->update($data);
+        return redirect::back();
     }
 
     /**

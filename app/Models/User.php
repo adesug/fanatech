@@ -43,6 +43,9 @@ class User extends Authenticatable
     // ];
 
     public function sales() {
-        return this->hasMany(User::class);
+        return this->has(User::class);
+    }
+    public function purchases() {
+        return this->has(Purchases::class);
     }
 }
