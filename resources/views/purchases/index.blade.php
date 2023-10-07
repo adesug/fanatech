@@ -102,7 +102,7 @@
                 "responsive": true, "lengthChange": false, "autoWidth": false,
                 "buttons": ["csv", "excel", "pdf", "print"],
                
-            }).buttons().container().appendTo('#table-1_wrapper .col-md-6:eq(0)');;
+            }).buttons().container().appendTo('#table-1_wrapper .col-md-6:eq(0)');
             $('#table-1').on('click', '.edit', function () {
                 var id = $(this).attr('id');
                 console.log(id);

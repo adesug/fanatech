@@ -48,4 +48,5 @@ class User extends Authenticatable
     public function purchases() {
         return this->has(Purchases::class);
     }
+
 }

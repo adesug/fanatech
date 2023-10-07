@@ -7,6 +7,7 @@ use App\Http\Controllers\superAdmin\adminSalesController;
 use App\Http\Controllers\superAdmin\adminPurchasesController;
 use App\Http\Controllers\purchases\PurchasesController;
 use App\Http\Controllers\sales\SalesController;
+use App\Http\Controllers\manager\managerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,7 +74,11 @@ Route::group(['middleware' =>['auth','role:Purchase']], function() {
 
 Route::group(['middleware' => ['auth','role:Manager']], function() {
     Route::get('manager/home',[HomeController::class,'managerHome'])->name('manager.home');
+
+    Route::get('manager/index/sales',[managerController::class,'indexSales'])->name('manager.indexSales');
+    Route::get('manager/index/purchases',[managerController::class,'indexPurchases'])->name('manager.indexPurchases');
 });
+
 
 
 

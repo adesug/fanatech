@@ -40,7 +40,7 @@ class HomeController extends Controller
         }else if(request()->user()->role == 'Purchase') {
             return view('purchaseHome',compact('purchaseDetails'));
         }else if(request()->user()->role == 'Manager') {
-            return view('managerHome');
+            return view('managerHome',compact('purchaseDetails','salesDetails'));
         }else {
             return redirect('/login');
         }
