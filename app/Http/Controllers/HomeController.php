@@ -29,14 +29,16 @@ class HomeController extends Controller
     {
         $inventoryCount= DB::table('inventories')->count();
         $purchasesCount= DB::table('purchases')->count();
+        $salesDetails = DB::table('sales_details')->count();
+        $purchaseDetails = DB::table('purchases_details')->count();
         $salesCount= DB::table('sales')->count();
         // return view('home');
         if(request()->user()->role == 'SuperAdmin'){
             return view('superAdminHome',compact('inventoryCount','purchasesCount','salesCount'));
         }else if(request()->user()->role == 'Sales'){
-            return view('salesHome');
+            return view('salesHome',compact('salesDetails'));
         }else if(request()->user()->role == 'Purchase') {
-            return view('purchaseHome');
+            return view('purchaseHome',compact('purchaseDetails'));
         }else if(request()->user()->role == 'Manager') {
             return view('managerHome');
         }else {

@@ -148,14 +148,10 @@
 <script>
     $(function () {
    $('#table-1').DataTable({
-     "paging": true,
-     "lengthChange": false,
-     "searching": true,
-     "ordering": true,
-     "info": true,
-     "autoWidth": false,
-     "responsive": true,
-   });
+    "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["csv", "excel", "pdf", "print"],
+               
+            }).buttons().container().appendTo('#table-1_wrapper .col-md-6:eq(0)');
    $('.select2').select2({
     placeholder: "Select...",
     allowClear: true,

@@ -14,4 +14,9 @@ class Inventory extends Model
 
     public function purchases_details(){
         return $this->hasOne(Purchases_detail::class);
-}   }
+    }
+    public function sales_details(){
+        return $this->hasOne(Sales_detail::class);
+    }   
+}
+

@@ -15,5 +15,8 @@ class Sales extends Model
     public function user(){
         return $this->belongsTo(User::class,'user_id');
     }
+    public function sales_details() {
+        return this->has(Sales_detail::class,'sales_id');
+    }
 }
 

@@ -13,5 +13,26 @@
 <script src="{{asset('assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
 <!-- Select2 -->
 <script src="{{asset('assets/plugins/select2/js/select2.full.min.js')}}"></script>
+{{-- cetak --}}
+<script src="{{asset('assets/plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
+<script src="{{asset('assets/plugins/jszip/jszip.min.js')}}"></script>
+<script src="{{asset('assets/plugins/pdfmake/pdfmake.min.js')}}"></script>
+<script src="{{asset('assets/plugins/pdfmake/vfs_fonts.js')}}"></script>
+<script src="{{asset('assets/plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
+<script src="{{asset('assets/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
+
+<script>
+     $(document).ready(function() {
+            //ajax setup
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+        });
+</script>
 
 @stack('myscript')
+
+

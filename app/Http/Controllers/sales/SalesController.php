@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\purchases;
+namespace App\Http\Controllers\sales;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Purchases_detail;
+use App\Models\Sales_detail;
 use App\Models\Inventory;
-use App\Models\Purchases;
+use App\Models\Sales;
 use Auth;
 use Redirect;
 use Illuminate\Support\Facades\DB;
 
-class PurchasesController extends Controller
+class SalesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,11 +20,16 @@ class PurchasesController extends Controller
      */
     public function index()
     {
-        $purchaseDetails = Purchases_detail::whereHas('purchases', function($query){
+        // dd(Auth::user()->id);
+        // $salesDetails = Sales_detail::with('sales')->with('inventory')->get();
+        // dd($salesDetails);
+        $salesDetails = Sales_detail::whereHas('sales', function($query){
             return $query->where('user_id','=',Auth::user()->id);
-        })->with('purchases')->with('inventory')->get();
+        })->with('sales')->with('inventory')->get();
+        // dd($salesDetails);
+
         // echo json_encode($tes);
-        return view('purchases.index',compact('purchaseDetails'));
+        return view('sales.index',compact('salesDetails'));
     }
 
     /**
@@ -35,8 +40,8 @@ class PurchasesController extends Controller
     public function create()
     {
         $inventory = Inventory::get();
-        $purchases = Purchases::get();
-        return view('purchases.create',compact('inventory','purchases'));
+        $sales = Sales::get();
+        return view('sales.create',compact('inventory','sales'));
     }
 
     /**
@@ -47,10 +52,11 @@ class PurchasesController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
+        
         $request->validate([
             'qty.*' => 'required',
             'price.*' => 'required',
-            'purchases_id.*' => 'required',
             'inventory_id.*' => 'required',
         ]);
 
@@ -58,18 +64,20 @@ class PurchasesController extends Controller
             
         foreach ($request->inventory_id as $key => $value) {
             $inventory_id = $request->inventory_id[$key];
-            $purchases_id = $request->purchases_id[$key];
+            $sales_id = Auth::user()->id;
             $qty = $request->qty[$key];
             $price = $request->price[$key];
             // dd($inventory_id);
             $dataStock = Inventory::find($inventory_id);
             $stockAwal = $dataStock->stock;
-            $stockTotal = $stockAwal+$qty;
+            $stockTotal = $stockAwal-$qty;
             
-
+            if($stockAwal < $qty ) {
+                return redirect::back()->with('error','Stok tidak mencukupi');
+            }
             $updateInventory = $dataStock->update([
                 'stock' => $stockTotal,
-                'price' => $price 
+                // 'price' => $price 
             ]);
 
             if(!$updateInventory) {
@@ -77,9 +85,9 @@ class PurchasesController extends Controller
             }
 
 
-            Purchases_detail::create([
+            Sales_detail::create([
                 'inventory_id' => $inventory_id,
-                'purchases_id' => $purchases_id,
+                'sales_id' => $sales_id,
                 'qty' => $qty,
                 'price' => $price,
             ]);
@@ -110,14 +118,9 @@ class PurchasesController extends Controller
      */
     public function edit(Request $request)
     {
-        $id = $request->id;
-
-        $purchasesDetails = Purchases_detail::where('id',$id)->with('purchases')->with('inventory')->first();
-
-        return view('purchases.edit',compact('purchasesDetails'));
-        
-
-
+        $id= $request->id;
+        $salesDetails = Sales_detail::where('id',$id)->with('sales')->with('inventory')->first();
+        return view('sales.edit',compact('salesDetails'));
     }
 
     /**
@@ -136,8 +139,9 @@ class PurchasesController extends Controller
         $data = [
             'price' => $price,
             'qty' => $qty,
+
         ];
-        $simpan = Purchases_detail::where('id',$id)->update($data);
+        $simpan = Sales_detail::where('id',$id)->update($data);
         return redirect::back();
     }
 
@@ -149,11 +153,9 @@ class PurchasesController extends Controller
      */
     public function destroy($id)
     {
-        $delete = Purchases_detail::where('id',$id)->delete();
+        $delete = Sales_detail::where('id',$id)->delete();
         if($delete) {
-            return redirect::back();
-        }else {
-            dd($delete);
+           return redirect::back(); 
         }
     }
 }

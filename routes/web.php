@@ -6,6 +6,7 @@ use App\Http\Controllers\superAdmin\adminInventoryController;
 use App\Http\Controllers\superAdmin\adminSalesController;
 use App\Http\Controllers\superAdmin\adminPurchasesController;
 use App\Http\Controllers\purchases\PurchasesController;
+use App\Http\Controllers\sales\SalesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,12 +51,20 @@ Route::group(['middleware' => ['auth','role:SuperAdmin']], function() {
 
 Route::group(['middleware' => ['auth','role:Sales']], function() {
     Route::get('sales/home',[HomeController::class,'salesHome'])->name('sales.home');
+
+    Route::get('sales/index',[SalesController::class,'index'])->name('sales.index');
+    Route::get('sales/index/create',[SalesController::class,'create'])->name('sales.indexCreate');
+    Route::post('sales/index/store',[SalesController::class,'store'])->name('sales.indexStore');
+    Route::post('sales/index/delete/{id}',[SalesController::class,'destroy'])->name('sales.indexDestroy');
+    Route::post('sales/index/edit',[SalesController::class,'edit'])->name('sales.indexEdit');
+    Route::post('sales/index/update',[SalesController::class,'update'])->name('sales.indexUpdate');
 });
 
 Route::group(['middleware' =>['auth','role:Purchase']], function() {
     Route::get('purchase/home',[HomeController::class,'purchaseHome'])->name('purchase.home');
 
     Route::get('purchases/index',[PurchasesController::class,'index'])->name('purchases.index');
+    Route::get('purchases/index/create',[PurchasesController::class,'create'])->name('purchases.indexCreate');
     Route::post('purchases/index/store',[PurchasesController::class,'store'])->name('purchases.indexStore');
     Route::post('purchases/index/delete/{id}',[PurchasesController::class,'destroy'])->name('purchases.indexDestroy');
     Route::post('purchases/index/edit',[PurchasesController::class,'edit'])->name('purchases.indexEdit');

@@ -4,12 +4,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Purchases Page</h1>
+                <h1 class="m-0">Sales Page</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Menu</a></li>
-                    <li class="breadcrumb-item active">Purchases Page</li>
+                    <li class="breadcrumb-item active">Sales Page</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -22,7 +22,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <a href="{{route('purchases.indexCreate')}}" class="btn btn-success">
+                    <a href="{{route('sales.indexCreate')}}" class="btn btn-success">
                         Create Data
                     </a>
                     {{-- <h3 class="card-title">DataTable with minimal features & hover style</h3> --}}
@@ -33,7 +33,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Purhases Number</th>
+                                <th>Sales Number</th>
                                 <th>Inventory Name</th>
                                 <th>Price</th>
                                 <th>Qty</th>
@@ -41,17 +41,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($purchaseDetails as $item)
+                            @foreach ($salesDetails as $item)
                             <tr>
                                 <td>{{$loop->iteration}}</td>
-                                <td>{{$item->purchases->number}}</td>
+                                <td>{{$item->sales->number}}</td>
                                 <td>{{$item->inventory->name}}</td>
                                 <td>Rp. {{$item->price}} ,-</td>
                                 <td>{{$item->qty}}</td>
                                 <td>
-                                    <form action="{{route('purchases.indexDestroy',$item->id)}}" method="POST">
+                                    <form action="{{route('sales.indexDestroy',$item->id)}}" method="POST">
                                         <div class="margin">
-                                            <span data-toggle="modal" data-target="#modalEditPurchases">
+                                            <span data-toggle="modal" data-target="#modalEditSales">
                                                 <a  class="btn btn-warning edit" id="{{$item->id}}">Edit</a>
                                             </span>
                                             {{-- <button class="btn btn-info">Detail</button> --}}
@@ -76,7 +76,7 @@
     </div>
 </div>
 {{-- modal edit --}}
-<div class="modal fade" id="modalEditPurchases">
+<div class="modal fade" id="modalEditSales">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -102,13 +102,14 @@
                 "responsive": true, "lengthChange": false, "autoWidth": false,
                 "buttons": ["csv", "excel", "pdf", "print"],
                
-            }).buttons().container().appendTo('#table-1_wrapper .col-md-6:eq(0)');;
+            }).buttons().container().appendTo('#table-1_wrapper .col-md-6:eq(0)');
+
             $('#table-1').on('click', '.edit', function () {
                 var id = $(this).attr('id');
                 console.log(id);
                 $.ajax({
                     type: 'POST',
-                    url: '/purchases/index/edit',
+                    url: '/sales/index/edit',
                     cache: false,
                     data: {
                         _token: "{{ csrf_token(); }}",
@@ -118,7 +119,7 @@
                         $('#loadeditform').html(respond);
                     }
                 });
-                $('#modalEditPurchases').modal('show');
+                $('#modalEditSales').modal('show');
             });
         });
 
