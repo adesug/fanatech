@@ -56,7 +56,7 @@
                         {{-- <button class="btn btn-info">Detail</button> --}}
                         <span>
                             @csrf
-                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="submit" class="btn btn-danger delete-confirm">Delete</button>
                         </span>
                         </div>
 
@@ -173,6 +173,25 @@
                 });
                 $('#modalEditSales').modal('show');
             });
+            $(".delete-confirm").click(function (e) {
+                var form = $(this).closest('form');
+                e.preventDefault();
+                Swal.fire({
+                    title : 'Apakah Anda Yakin Data Ini Mau Di hapus ?'
+                    , text : 'Jika ya maka data akan dihapus permanent'
+                    , icon : 'warning'
+                    , showCancelButton : true
+                    , confirmButtonColor : '#3085d6'
+                    , cancelButtonColor : '#d33'
+                    , confirmButtonText : 'Ya, Hapus !'
+                }).then((result) => {
+                    if(result.isConfirmed) {
+                        form.submit();
+                        Swal.fire(
+                            'Deleted !' , 'Data Berhasil Dihapus' , 'success');
+                    }
+                })
+            })
  });
 </script>
 @endpush

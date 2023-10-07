@@ -40,7 +40,7 @@ class adminInventoryController extends Controller
             'stock' => $stock
         ];
         $simpan = DB::table('inventories')->insert($data);
-        return redirect()->back();
+        return redirect()->back()->with(['success' => 'Data Berhasil Ditambahkan']);
     }
 
     /**
